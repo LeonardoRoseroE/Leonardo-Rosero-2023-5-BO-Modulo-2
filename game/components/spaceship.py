@@ -1,7 +1,7 @@
 import pygame
 from pygame.sprite import Sprite
 
-from game.utils.constants import SPACESHIP, SCREEN_HEIGHT
+from game.utils.constants import SPACESHIP, SCREEN_HEIGHT, SCREEN_WIDTH
 
 MOV = 7 # velocidad de Movimiento de la Nave por el momento es una constante 
 class SpaceShip(Sprite):
@@ -9,8 +9,8 @@ class SpaceShip(Sprite):
         self.image_size = (40, 60)
         self.image = pygame.transform.scale(SPACESHIP, self.image_size)
         self.image_rect = self.image.get_rect()
-        self.image_rect.x = self.image_size[0]
-        self.image_rect.y = self.image_size[1]
+        self.image_rect.x = SCREEN_WIDTH // 2
+        self.image_rect.y = SCREEN_HEIGHT // 2
         self.screen_width = pygame.display.get_surface().get_width()
 
     def update(self):
@@ -27,3 +27,6 @@ class SpaceShip(Sprite):
             self.image_rect.y -= MOV
         if keys[pygame.K_s] and self.image_rect.bottom < SCREEN_HEIGHT:  # Tecla S para moverse hacia abajo
             self.image_rect.y += MOV
+
+
+        
