@@ -28,6 +28,9 @@ class Enemy(Sprite):
         # Actualizar la posición objetivo
         self.target_x = target_x
 
+    def reset_position(self):
+        self.rect.x = randint(0, SCREEN_WIDTH - self.rect.width)
+        self.rect.y = -self.rect.height
 
 
 
