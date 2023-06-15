@@ -30,7 +30,7 @@ class Enemy(Sprite):
 
     def reset_position(self):
         self.rect.x = randint(0, SCREEN_WIDTH - self.rect.width)
-        self.rect.y = -self.rect.height
+        self.rect.y = 100 
 
 
 
