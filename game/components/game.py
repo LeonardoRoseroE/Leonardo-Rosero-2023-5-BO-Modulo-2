@@ -14,6 +14,8 @@ class Game:
         self.game_speed = 10
         self.x_pos_bg = 0
         self.y_pos_bg = 0
+        self.bullet_count = 0
+        self.death_count = 0
 
         self.spaceship = SpaceShip()
         self.enemy = Enemy()
@@ -24,6 +26,9 @@ class Game:
             self.handle_events()
             self.update()
             self.draw()
+        
+        self.show_game_over_screen()
+
         pygame.display.quit()
         pygame.quit()
 
@@ -34,20 +39,26 @@ class Game:
 
     def update(self):
         self.spaceship.update()
-        self.enemy.update(self.spaceship.image_rect)
+        self.enemy.update(self.spaceship.rect)  
 
         # Verificar colisiones entre las balas del spaceship y el enemigo
         collisions = pygame.sprite.spritecollide(self.enemy, self.spaceship.bullets, True)
         if collisions:
             self.enemy.reset_position()
+            self.bullet_count += 1
+
+        if self.bullet_count > 5:  
+            self.game_over = True
+            self.death_count += 1
 
     def draw(self):
         self.clock.tick(FPS)
         self.screen.fill((255, 255, 255))
         self.draw_background()
-        self.screen.blit(self.spaceship.image, self.spaceship.image_rect)
+        self.screen.blit(self.spaceship.image, self.spaceship.rect)
         self.screen.blit(self.enemy.image, self.enemy.rect)
         self.spaceship.bullets.draw(self.screen)
+        self.enemy.bullets.draw(self.screen)
         pygame.display.update()
         pygame.display.flip()
 
@@ -60,4 +71,20 @@ class Game:
             self.screen.blit(image, (self.x_pos_bg, self.y_pos_bg - image_height))
             self.y_pos_bg = 0
         self.y_pos_bg += self.game_speed
+
+    def show_game_over_screen(self):
+        font = pygame.font.Font(None, 64)
+        game_over_text = font.render("Game Over", True, (255, 0, 0))
+        game_over_rect = game_over_text.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 - 50))
+        summary_text = font.render(f"Bullets: {self.bullet_count}", True, (0, 0, 0))
+        summary_rect = summary_text.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2))
+        death_count_text = font.render(f"Death Count: {self.death_count}", True, (0, 0, 0))
+        death_count_rect = death_count_text.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + 50))
+
+        self.screen.fill((255, 255, 255))
+        self.screen.blit(game_over_text, game_over_rect)
+        self.screen.blit(summary_text, summary_rect)
+        self.screen.blit(death_count_text, death_count_rect)
+        pygame.display.flip()
+        pygame.time.wait(3000)  # Muestra la pantalla de Game Over durante 3 segundos
 
