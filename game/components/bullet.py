@@ -1,6 +1,6 @@
 import pygame
 from pygame.sprite import Sprite
-from game.utils.constants import BULLET_SPEED, BULLET
+from game.utils.constants import BULLET
 
 class Bullet(Sprite):
     def __init__(self, x, y, velocity_x=0, velocity_y=0):

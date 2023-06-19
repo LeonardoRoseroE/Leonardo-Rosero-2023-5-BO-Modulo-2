@@ -1,13 +1,17 @@
 import pygame
 from pygame.sprite import Sprite
 from game.components.bullet import Bullet
-from game.utils.constants import SPACESHIP, SCREEN_HEIGHT, SCREEN_WIDTH
+from game.utils.constants import SPACESHIP, SCREEN_HEIGHT, SCREEN_WIDTH, FPS
 
 MOV = 7
 
 class SpaceShip(Sprite):
+
+    immune_duration = 30 * FPS  # Duración de la inmunidad en ticks
+
     def __init__(self):
         super().__init__()
+        self.immune_timer = 0  # Timer de inmunidad inicializado en 0
         self.image_size = (40, 60)
         self.image = pygame.transform.scale(SPACESHIP, self.image_size)
         self.rect = self.image.get_rect()
@@ -15,6 +19,21 @@ class SpaceShip(Sprite):
         self.rect.y = SCREEN_HEIGHT // 2
         self.screen_width = pygame.display.get_surface().get_width()
         self.bullets = pygame.sprite.Group()
+
+    def activate_immunity(self):
+        self.immune_timer = self.immune_duration
+
+    def get_immune_time(self):
+        return max(self.immune_timer // FPS, 0)  # Convierte los ticks restantes a segundos y asegura que sea un valor no negativo
+
+    def is_immune(self):
+        return self.immune_timer > 0
+    
+    def reset(self):
+        self.rect.centerx = SCREEN_WIDTH // 2
+        self.rect.bottom = SCREEN_HEIGHT - 20
+        self.speed = 0
+        self.bullets.empty()
 
     def update(self):
         keys = pygame.key.get_pressed()
@@ -33,6 +52,9 @@ class SpaceShip(Sprite):
 
         if keys[pygame.K_SPACE]:  # Tecla Espacio para disparar
             self.shoot()
+
+        if self.immune_timer > 0:
+            self.immune_timer -= 1
 
         self.bullets.update()
 

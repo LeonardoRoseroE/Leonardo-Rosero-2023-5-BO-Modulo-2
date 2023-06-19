@@ -6,6 +6,7 @@ TITLE = "Spaceships Game"
 SCREEN_HEIGHT = 600
 SCREEN_WIDTH = 1100
 BULLET_SPEED = 10
+SHIELD_DURATION = 10  # Duración del escudo en segundos
 FPS = 30
 IMG_DIR = os.path.join(os.path.dirname(__file__), "..", "assets")
 
@@ -15,6 +16,12 @@ ICON = pygame.image.load(os.path.join(IMG_DIR, "Spaceship/spaceship.png"))
 SHIELD = pygame.image.load(os.path.join(IMG_DIR, 'Other/shield.png'))
 
 BG = pygame.image.load(os.path.join(IMG_DIR, 'Other/Track.png'))
+
+MENU = pygame.image.load(os.path.join(IMG_DIR, 'Other/Menu.png'))
+
+END = pygame.image.load(os.path.join(IMG_DIR, 'Other/GameOverFondo.png'))
+
+INSTRUCTIONS_BACKGROUND = pygame.image.load(os.path.join(IMG_DIR, 'Other/Instruccions.png'))
 
 HEART = pygame.image.load(os.path.join(IMG_DIR, 'Other/SmallHeart.png'))
 

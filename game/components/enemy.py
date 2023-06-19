@@ -16,6 +16,13 @@ class Enemy(Sprite):
         self.speed = 6  # Velocidad de movimiento
         self.target_x = self.rect.x  # Posición objetivo inicial
         self.bullets = pygame.sprite.Group()  # Grupo para almacenar las balas
+        self.last_shot_time = 0 # Variable para almacenar el tiempo entre balas
+
+    def reset(self):
+        self.rect.x = randint(0, SCREEN_WIDTH - self.rect.width)
+        self.rect.y = 100
+       
+
 
     def update(self, spaceship_rect):
         target_x = spaceship_rect.x - self.rect.width // 2
@@ -36,12 +43,16 @@ class Enemy(Sprite):
         self.bullets.update()
 
     def shoot(self):
-        bullet = Bullet(self.rect.centerx, self.rect.bottom, velocity_x= 0, velocity_y= 5)  # Ajusta la velocidad horizontal a un valor negativo
-        self.bullets.add(bullet)
+        current_time = pygame.time.get_ticks()
+        time_since_last_shot = current_time - self.last_shot_time
+        if time_since_last_shot >= 1500:  # 1500 milisegundos = 1.5 segundos
+            bullet = Bullet(self.rect.centerx, self.rect.bottom, velocity_x=0, velocity_y=5)
+            self.bullets.add(bullet)
+            self.last_shot_time = current_time
 
     def reset_position(self):
         self.rect.x = randint(0, SCREEN_WIDTH - self.rect.width)
-        self.rect.y = 100
+        self.rect.y = 80
 
 
 
